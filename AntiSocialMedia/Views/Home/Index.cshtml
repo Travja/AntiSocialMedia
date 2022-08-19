@@ -1,0 +1,21 @@
+﻿@{
+    @if (User.Identity is { IsAuthenticated: true })
+    {
+        ViewData["Title"] = "Your Feed";
+    }
+    else
+    {
+        ViewData["Title"] = "Welcome";
+    }
+}
+
+<div class="text-center">
+    @if (User.Identity is { IsAuthenticated: true })
+    {
+        <partial name="_Feed"></partial>
+    }
+    else
+    {
+        <partial name="_Welcome"></partial>
+    }
+</div>
