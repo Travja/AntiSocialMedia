@@ -1,0 +1,32 @@
+version: '3.9'
+
+services: 
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql
+    restart: always
+    networks:
+      - anti-media
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: "myPassword!s3cure"
+    volumes:
+      - ./.data/mssql:/var/opt/mssql
+    
+  media-api:
+    build:
+      context: ./
+    restart: always
+    ports:
+      - "7094:80"
+      - "7095:443"
+    networks:
+      - anti-media
+    environment:
+      "ConnectionStrings:DefaultConnection": "Server=mssql;Database=anti-media;user id=sa;password=myPassword!s3cure;"
+
+networks:
+  anti-media:
+    name: AntiSocial Media Network
