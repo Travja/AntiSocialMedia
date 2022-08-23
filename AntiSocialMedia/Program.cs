@@ -1,21 +1,45 @@
 using AntiData.Data;
 using AntiData.Model;
+using AntiData.Repo;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using VideoGameDataAccess.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllersWithViews();
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+builder.Services.AddDbContext<MediaContext>(options =>
+    options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<MediaContext>(options =>
+    options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<AntiUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
+    .AddEntityFrameworkStores<MediaContext>();
+
+// Add injection types
+builder.Services.AddScoped<IMediaRepository<MediaPost, int>, PostRepository>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        var context = services.GetRequiredService<MediaContext>();
+        DbInitializer.Initialize(context);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occured creating the DB");
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -36,6 +60,18 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "user",
+    pattern: "u/{username}",
+    new { controller = "User", action = "Feed" }
+);
+
+app.MapControllerRoute(
+    name: "post",
+    pattern: "post/{username}",
+    new { controller = "User", action = "CreatePost" }
+);
 
 app.MapControllerRoute(
     name: "default",

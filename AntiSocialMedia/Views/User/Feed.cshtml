@@ -1,0 +1,14 @@
+﻿@model AntiData.Model.AntiUser
+
+@{
+    ViewData["Title"] = Model.UserName + "'s Page";
+}
+
+<div class="text-center">
+    <p>Welcome to @Model.UserName's Page</p>
+    <form action="/post/@Model.UserName" method="post">
+        <textarea name="PostText"></textarea>
+        <input type="submit" class="btn"/>
+    </form>
+    @* <partial name="_Feed"></partial> *@
+</div>

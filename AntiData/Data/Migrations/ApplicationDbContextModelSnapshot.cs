@@ -9,7 +9,7 @@ using AntiData.Model;
 
 namespace AntiData.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(MediaContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -122,6 +122,7 @@ namespace AntiData.Data.Migrations
                 b.HasKey("Id");
 
                 b.HasIndex("NormalizedEmail")
+                    .IsUnique()
                     .HasName("EmailIndex");
 
                 b.HasIndex("NormalizedUserName")
