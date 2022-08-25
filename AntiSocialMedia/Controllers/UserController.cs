@@ -12,10 +12,10 @@ public class UserController : Controller
 {
     private readonly ILogger<UserController> _logger;
     private readonly UserManager<AntiUser> _userManager;
-    private readonly IMediaRepository<MediaPost, int> _postRepo;
+    private readonly IPostRepository _postRepo;
 
     public UserController(ILogger<UserController> logger, UserManager<AntiUser> userManager,
-        IMediaRepository<MediaPost, int> postRepo)
+        IPostRepository postRepo)
     {
         _logger = logger;
         _userManager = userManager;
@@ -30,10 +30,14 @@ public class UserController : Controller
         {
             return Redirect("/");
         }
-        else
+
+        var posts = _postRepo.FindByUser(user.Id);
+        FeedData feedData = new()
         {
-            return View(user);
-        }
+            User = user,
+            Posts = posts
+        };
+        return View(feedData);
     }
 
     [Authorize]

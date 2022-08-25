@@ -1,7 +1,6 @@
-using AntiData.Data;
 using AntiData.Model;
 
-namespace VideoGameDataAccess.Data;
+namespace AntiData.Data;
 
 public class DbInitializer
 {

@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.AspNetCore.Identity;
 using AntiData.Model;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace AntiData.Data.Migrations
 {
@@ -118,6 +120,10 @@ namespace AntiData.Data.Migrations
                 b.Property<string>("UserName")
                     .HasColumnType("TEXT")
                     .HasMaxLength(256);
+
+                b.Property<string>("Avatar")
+                    .HasColumnType("TEXT")
+                    .HasDefaultValue<string>("https://lh3.googleusercontent.com/b91FFh2EPsExNTHHqECbEQsqDSgaBeOxYWIZfNeYdXfmBOIFPpbyB2VphB_6m_g5iu_ACtgA11X-64TsqWUtdv5x9fFzco4N7OzFYio=w600");
 
                 b.HasKey("Id");
 

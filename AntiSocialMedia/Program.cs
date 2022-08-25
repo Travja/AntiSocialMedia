@@ -3,7 +3,6 @@ using AntiData.Model;
 using AntiData.Repo;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using VideoGameDataAccess.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,15 +12,20 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<MediaContext>(options =>
     options.UseSqlServer(connectionString));
-builder.Services.AddDbContext<MediaContext>(options =>
-    options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<AntiUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<MediaContext>();
 
 // Add injection types
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IMediaRepository<MediaPost, int>, PostRepository>();
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequiredLength = 8;
+    options.Password.RequireNonAlphanumeric = false;
+    
+});
 
 var app = builder.Build();
 

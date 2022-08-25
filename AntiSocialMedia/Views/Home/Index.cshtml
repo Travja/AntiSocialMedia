@@ -12,7 +12,12 @@
 <div class="text-center">
     @if (User.Identity is { IsAuthenticated: true })
     {
-        <partial name="_Feed"></partial>
+        <p>Your Feed</p>
+        <form action="/post/@User.Identity.Name" method="post">
+            <textarea name="PostText"></textarea>
+            <input type="submit" class="btn"/>
+        </form>
+        @(await Html.PartialAsync("_Feed", new FeedData(){Posts = ViewBag.Posts}))
     }
     else
     {

@@ -1,3 +1,23 @@
-<div>
-    Feed
-</div>
+@model FeedData
+
+@if (Model?.Posts == null || Model.Posts.ToList().Count == 0)
+{
+    <div>There are no posts on this page.</div>
+}
+else
+{
+    @foreach (var post in Model.Posts)
+    {
+        <div class="post">
+            <div class="post-header">
+                <img class="avatar" src="@post.Poster.Avatar" alt="@post.Poster.UserName's Avatar"/>
+                <a href="/u/@post.Poster.UserName">@post.Poster.UserName</a>
+                <span class="spacer"></span>
+                <span>@post.Timestamp.ToString(DateTime.Now.Subtract(post.Timestamp).Days > 3 ? "M-d-yy, h:mm tt" : "dddd, hh:mm tt")</span>
+            </div>
+            <div class="post-body">
+                @post.PostText
+            </div>
+        </div>
+    }
+}

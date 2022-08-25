@@ -1,14 +1,21 @@
-﻿@model AntiData.Model.AntiUser
+﻿@model FeedData
 
 @{
-    ViewData["Title"] = Model.UserName + "'s Page";
+    ViewData["Title"] = Model.User.UserName + "'s Page";
 }
 
 <div class="text-center">
-    <p>Welcome to @Model.UserName's Page</p>
-    <form action="/post/@Model.UserName" method="post">
+    @if (Model.User.UserName.Equals(User.Identity?.Name))
+    {
+        <p>Your Feed</p>
+    }
+    else
+    {
+        <p>Welcome to @Model.User.UserName's Page</p>
+    }
+    <form action="/post/@Model.User.UserName" method="post">
         <textarea name="PostText"></textarea>
         <input type="submit" class="btn"/>
     </form>
-    @* <partial name="_Feed"></partial> *@
+    @(await Html.PartialAsync("_Feed", Model))
 </div>

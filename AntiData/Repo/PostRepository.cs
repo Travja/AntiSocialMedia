@@ -3,13 +3,18 @@ using AntiData.Model;
 
 namespace AntiData.Repo;
 
-public class PostRepository : IMediaRepository<MediaPost, int>
+public class PostRepository : IPostRepository
 {
     private readonly MediaContext _context;
 
     public PostRepository(MediaContext context)
     {
         _context = context;
+    }
+
+    public IEnumerable<MediaPost> FindAll()
+    {
+        return _context.Posts.ToList();
     }
 
     public MediaPost FindById(int id)
@@ -45,5 +50,10 @@ public class PostRepository : IMediaRepository<MediaPost, int>
         return _context.Posts.Remove(
             FindById(id)
         ).Entity;
+    }
+
+    public IEnumerable<MediaPost> FindByUser(string userId)
+    {
+        return _context.Posts.Where(post => post.User.Id.Equals(userId));
     }
 }
