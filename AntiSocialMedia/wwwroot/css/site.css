@@ -202,3 +202,16 @@ a.brand {
 .hidden {
     display: none;
 }
+
+.search-control, .search-form {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+}
+
+.search-form .form-control {
+    width: unset;
+}

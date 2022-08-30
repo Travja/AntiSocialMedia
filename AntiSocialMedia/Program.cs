@@ -79,6 +79,12 @@ app.MapControllerRoute(
 );
 
 app.MapControllerRoute(
+    name: "search",
+    pattern: "search",
+    new { controller = "User", action = "Search" }
+);
+
+app.MapControllerRoute(
     name: "post",
     pattern: "post/{username}",
     new { controller = "User", action = "CreatePost" }

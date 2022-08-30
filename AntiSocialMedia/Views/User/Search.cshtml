@@ -1,0 +1,19 @@
+﻿@model IEnumerable<AntiData.Model.AntiUser>
+
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+<h2>Search Results</h2>
+<hr/>
+<div class="text-center">
+    @foreach (var user in Model)
+    {
+        <div>
+            <a href="/u/@user.UserName" class="user-link">
+                <img class="avatar" src="@user.Avatar" alt="@user.Profile.Name's Avatar"/>
+                @user.Profile.Name
+            </a>
+        </div>
+    }
+</div>

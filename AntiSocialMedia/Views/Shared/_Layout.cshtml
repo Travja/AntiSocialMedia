@@ -26,6 +26,12 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
                     </li>
+                    <li class="search-control">
+                        <form action="/search" class="search-form">
+                            <input name="query" placeholder="Search..." class="form-control"/>
+                            <button type="submit" class="hidden" id="search-button">Search</button>
+                        </form>
+                    </li>
                 </ul>
                 <partial name="_LoginPartial"/>
             </div>
@@ -43,6 +49,7 @@
         &copy; 2022 - Travja - <a href="https://github.com/Travja" target="_blank">GitHub</a>
     </div>
 </footer>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>

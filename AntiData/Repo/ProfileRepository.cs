@@ -62,4 +62,17 @@ public class ProfileRepository : IProfileRepository
         return _userManager.Users
             .Single(user => user.Id.Equals(userId)).Profile;
     }
+
+    public IEnumerable<AntiUser> SearchUsers(string? query, int minAge, int maxAge)
+    {
+        query ??= "";
+        query = query.ToLower();
+        return _userManager.Users
+            .Include(u => u.Profile)
+            .Where(
+                u =>
+                    (u.UserName.ToLower().Contains(query) || u.Profile.Name.ToLower().Contains(query))
+                    && u.Profile.Age >= minAge && u.Profile.Age <= maxAge
+            );
+    }
 }

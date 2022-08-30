@@ -108,6 +108,14 @@ public class UserController : Controller
         return Redirect("/");
     }
 
+    [Authorize]
+    public IActionResult Search(string query, int minAge = -1, int maxAge = 130)
+    {
+        var users = _profileRepo.SearchUsers(query, minAge, maxAge);
+
+        return View(users);
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
