@@ -11,19 +11,19 @@ public class DbInitializer
         SetupPosts(ctx);
     }
 
-    public static void SetupPosts(MediaContext ctx)
+    private static void SetupPosts(MediaContext ctx)
     {
         if (ctx.Posts.Any()) return;
 
-        var posts = new MediaPost[]
-        {
-            new()
-            {
-                PostText = "asdfa"
-            }
-        };
-
-        ctx.Posts.AddRange(posts);
+        // var posts = new MediaPost[]
+        // {
+        //     new()
+        //     {
+        //         PostText = "asdfa"
+        //     }
+        // };
+        //
+        // ctx.Posts.AddRange(posts);
         ctx.SaveChanges();
     }
 }

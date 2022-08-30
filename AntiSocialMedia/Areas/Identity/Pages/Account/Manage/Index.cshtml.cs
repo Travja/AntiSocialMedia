@@ -59,6 +59,10 @@ namespace SocialMedia.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+            
+            [DataType(DataType.ImageUrl)]
+            [Display(Name = "Avatar")]
+            public string Avatar { get; set; }
         }
 
         private async Task LoadAsync(AntiUser user)
@@ -70,7 +74,8 @@ namespace SocialMedia.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Avatar = user.Avatar
             };
         }
 
@@ -101,6 +106,7 @@ namespace SocialMedia.Areas.Identity.Pages.Account.Manage
             }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var avatar = user.Avatar;
             if (Input.PhoneNumber != phoneNumber)
             {
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
@@ -109,6 +115,12 @@ namespace SocialMedia.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
+            }
+
+            if (Input.Avatar != avatar)
+            {
+                user.Avatar = Input.Avatar;
+                await _userManager.UpdateAsync(user);
             }
 
             await _signInManager.RefreshSignInAsync(user);

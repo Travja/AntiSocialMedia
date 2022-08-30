@@ -1,0 +1,51 @@
+@model IEnumerable<AntiData.Model.UserPhoto>
+
+<script lang="js">
+const openImage = (url) => {
+    let modal = document.getElementById("image-modal");
+    let image = document.getElementById("modal-image");
+    image.src = url;
+    modal.classList.toggle("shown");
+}
+
+const closeImage = () => {
+    let modal = document.getElementById("image-modal");
+    modal.classList.toggle("shown");
+}
+
+const expandPhotos = () => {
+    let expand = document.getElementById("expand");
+    let photos = document.getElementById("user-images");
+    if (photos.classList.contains("expanded")) {
+        expand.innerHTML = "&#9660; Expand Photos";
+    } else {
+        expand.innerHTML = "&#9650; Collapse Photos";
+    }
+    photos.classList.toggle("expanded");
+}
+</script>
+
+<div id="image-modal" onclick="closeImage()">
+    <img id="modal-image" src=""/>
+</div>
+
+<div id="user-images">
+    @foreach (var photo in Model)
+    {
+        <img src="@photo.Url" class="feed-photo"
+             onclick="openImage('@photo.Url')"/>
+    }
+    
+    @if (Model.ToList().Count == 0)
+    {
+        <div class="feed-photo">
+            No Photos
+        </div>
+    }
+    @if (Model.ToList().Count >= 4)
+    {
+        <div id="expand" onclick="expandPhotos()">
+            &#9660; Expand Photos
+        </div>
+    }
+</div>

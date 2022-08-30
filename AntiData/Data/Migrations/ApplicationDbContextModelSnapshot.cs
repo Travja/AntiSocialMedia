@@ -125,6 +125,9 @@ namespace AntiData.Data.Migrations
                     .HasColumnType("TEXT")
                     .HasDefaultValue<string>("https://lh3.googleusercontent.com/b91FFh2EPsExNTHHqECbEQsqDSgaBeOxYWIZfNeYdXfmBOIFPpbyB2VphB_6m_g5iu_ACtgA11X-64TsqWUtdv5x9fFzco4N7OzFYio=w600");
 
+                b.Property<int>("ProfileId")
+                    .HasColumnType("INTEGER");
+                
                 b.HasKey("Id");
 
                 b.HasIndex("NormalizedEmail")
@@ -134,7 +137,7 @@ namespace AntiData.Data.Migrations
                 b.HasIndex("NormalizedUserName")
                     .IsUnique()
                     .HasName("UserNameIndex");
-
+                
                 b.ToTable("AspNetUsers");
             });
 

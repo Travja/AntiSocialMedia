@@ -1,5 +1,6 @@
 using AntiData.Data;
 using AntiData.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace AntiData.Repo;
 
@@ -14,12 +15,15 @@ public class PostRepository : IPostRepository
 
     public IEnumerable<MediaPost> FindAll()
     {
-        return _context.Posts.ToList();
+        return _context.Posts
+            .Include(p => p.Poster.Profile)
+            .OrderByDescending(p => p.Timestamp);
     }
 
     public MediaPost FindById(int id)
     {
         return _context.Posts
+            .Include(p => p.Poster.Profile)
             .First(post => post.Id == id);
     }
 
@@ -54,6 +58,10 @@ public class PostRepository : IPostRepository
 
     public IEnumerable<MediaPost> FindByUser(string userId)
     {
-        return _context.Posts.Where(post => post.User.Id.Equals(userId));
+        return _context.Posts
+            .Include(e => e.Poster)
+            .Include(e => e.Poster.Profile)
+            .Where(post => post.User.Id.Equals(userId))
+            .OrderByDescending(p => p.Timestamp);
     }
 }

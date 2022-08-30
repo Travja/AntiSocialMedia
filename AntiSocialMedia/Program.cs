@@ -2,6 +2,7 @@ using AntiData.Data;
 using AntiData.Model;
 using AntiData.Repo;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,12 +20,12 @@ builder.Services.AddDefaultIdentity<AntiUser>(options => options.SignIn.RequireC
 
 // Add injection types
 builder.Services.AddScoped<IPostRepository, PostRepository>();
-builder.Services.AddScoped<IMediaRepository<MediaPost, int>, PostRepository>();
+builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequiredLength = 8;
     options.Password.RequireNonAlphanumeric = false;
-    
 });
 
 var app = builder.Build();
@@ -66,6 +67,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "edit",
+    pattern: "about/edit",
+    new { controller = "User", action = "ProfileEdit" }
+);
+
+app.MapControllerRoute(
     name: "user",
     pattern: "u/{username}",
     new { controller = "User", action = "Feed" }
@@ -75,6 +82,12 @@ app.MapControllerRoute(
     name: "post",
     pattern: "post/{username}",
     new { controller = "User", action = "CreatePost" }
+);
+
+app.MapControllerRoute(
+    name: "photo",
+    pattern: "photo/{username}",
+    new { controller = "User", action = "CreatePhoto" }
 );
 
 app.MapControllerRoute(

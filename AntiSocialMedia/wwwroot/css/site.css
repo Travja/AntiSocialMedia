@@ -78,3 +78,127 @@ a.brand {
     box-shadow: 4px 4px 5px #444;
     margin-right: 1em;
 }
+
+#postText {
+    display: none;
+}
+
+.posting-wrapper {
+    width: 80%;
+    border: 1px solid black;
+    border-radius: 0.5em;
+    margin: 0.5em auto;
+    text-align: left;
+    padding: 0.5em;
+    position: relative;
+}
+
+.posting-wrapper div[contenteditable] {
+    background-color: #ccc;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+    max-height: 10em;
+    overflow: auto;
+}
+
+.posting-wrapper div[contenteditable]:focus {
+    outline: none;
+}
+
+.my-placeholder {
+    color: gray;
+}
+
+.post-btn {
+    border-radius: 0.25em;
+    float: right;
+}
+
+.post-photo-btn {
+    border-radius: 0.25em;
+}
+
+.user-link {
+    text-decoration: none;
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+.user-link:visited {
+    color: #3b69b6;
+}
+
+#user-images {
+    margin: 1em auto;
+    max-height: 11em;
+    overflow: hidden;
+    position: relative;
+    max-width: 80%;
+    padding-bottom: 1em;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#user-images #expand {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    text-align: center;
+    color: white;
+    user-select: none;
+    text-shadow: 2px 2px 2px black;
+    background: linear-gradient(to top, #aaa, transparent);
+}
+
+#user-images.expanded {
+    max-height: unset;
+}
+
+#user-images #expand:hover {
+    cursor: pointer;
+}
+
+.feed-photo {
+    height: 10em;
+    aspect-ratio: 1;
+    object-fit: cover;
+    object-position: center;
+    margin-bottom: 0.5em;
+}
+
+.feed-photo:hover {
+    cursor: pointer;
+}
+
+#image-modal {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    inset: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 50;
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+}
+
+#image-modal.shown {
+    display: flex;
+}
+
+#modal-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    padding: 2em;
+}
+
+.hidden {
+    display: none;
+}

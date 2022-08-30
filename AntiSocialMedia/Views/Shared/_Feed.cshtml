@@ -1,4 +1,90 @@
 @model FeedData
+@{
+    var profile = Model.User.Profile;
+}
+
+<script>
+const placeholderText = "Say something...";
+const update = (e) => {
+    document.getElementById("postText").value = e.innerText;
+};
+
+const clearText = (target) => {
+    if (target.innerText === placeholderText) {
+        target.innerText = "";
+        target.classList.remove("my-placeholder");
+    }
+};
+
+const addPlaceholder = (target) => {
+    if (target.innerText === "") {
+        target.innerText = placeholderText;
+        target.classList.add("my-placeholder");
+    }
+};
+</script>
+
+<div class="page-header text-start">
+    <h2>
+        <img class="avatar" src="@Model.User.Avatar" alt="@Model.User.UserName's Avatar"/>
+        @profile.Name
+    </h2>
+</div>
+
+<div class="text-start">
+    <div>About</div>
+    @if (profile.Age == -1)
+    {
+        <div>I'm new here</div>
+    }
+    else
+    {
+        <div>@profile.Age years old</div>
+        @if (profile.FavoriteBook is {Length: > 0 })
+        {
+            <div>Favorite Food: @profile.FavoriteBook</div>
+        }
+        @if (profile.FavoriteFood is {Length: > 0 })
+        {
+            <div>Favorite Food: @profile.FavoriteFood</div>
+        }
+    }
+    @if (User.Identity?.Name != null && User.Identity.Name.Equals(@Model.User.UserName))
+    {
+        <a href="/about/edit">Edit</a>
+    }
+</div>
+
+<hr/>
+
+<form action="/post/@Model.User.UserName?redirectUrl=@Context.Request.Path" method="post">
+    <div class="posting-wrapper">
+        <div contenteditable
+             onkeyup="update(this)"
+             onfocus="clearText(this)"
+             onblur="addPlaceholder(this)"
+             class="my-placeholder">
+            Say something...
+        </div>
+        <textarea name="PostText" id="postText"></textarea>
+        <button type="submit" class="btn btn-primary post-btn">Post</button>
+        <div class="clearfix"></div>
+    </div>
+</form>
+@if (User.Identity?.Name != null && User.Identity.Name.Equals(@Model.User.UserName))
+{
+    <div>- or -</div>
+    <form action="/photo/@Model.User.UserName?redirectUrl=@Context.Request.Path"
+          method="post">
+        <input name="Url" placeholder="https://myurl.com/"/>
+        <br/>
+        <button type="submit" class="btn btn-primary post-photo-btn">Add Photo</button>
+    </form>
+}
+
+@(await Html.PartialAsync("_Photos", Model.Photos))
+
+<hr/>
 
 @if (Model?.Posts == null || Model.Posts.ToList().Count == 0)
 {
@@ -6,17 +92,32 @@
 }
 else
 {
+    @if (Model.User.UserName.Equals(User.Identity?.Name))
+    {
+        <p>Your Feed</p>
+    }
+    else
+    {
+        <p>@Model.User.Profile.Name's Feed</p>
+    }
     @foreach (var post in Model.Posts)
     {
         <div class="post">
             <div class="post-header">
                 <img class="avatar" src="@post.Poster.Avatar" alt="@post.Poster.UserName's Avatar"/>
-                <a href="/u/@post.Poster.UserName">@post.Poster.UserName</a>
+                <a href="/u/@post.Poster.UserName" class="user-link">@post.Poster.Profile.Name</a>
                 <span class="spacer"></span>
-                <span>@post.Timestamp.ToString(DateTime.Now.Subtract(post.Timestamp).Days > 3 ? "M-d-yy, h:mm tt" : "dddd, hh:mm tt")</span>
+                <span>@post.Timestamp.ToString(DateTime.Now.Subtract(post.Timestamp).Days > 3 ? "M-d-yy, h:mm tt" : "dddd, h:mm tt")</span>
             </div>
             <div class="post-body">
-                @post.PostText
+                @for (var i = 0; i < post.PostText.Split("\n").Length; i++)
+                {
+                    @post.PostText.Split("\n")[i]
+                    @if (i < post.PostText.Split("\n").Length - 1)
+                    {
+                        <br/>
+                    }
+                }
             </div>
         </div>
     }
