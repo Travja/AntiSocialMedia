@@ -16,6 +16,7 @@ builder.Services.AddDbContext<MediaContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<AntiUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<MediaContext>();
 
 // Add injection types
@@ -37,7 +38,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<MediaContext>();
-        DbInitializer.Initialize(context);
+        await DbInitializer.Initialize(context, services.GetRequiredService<RoleManager<IdentityRole>>());
     }
     catch (Exception ex)
     {

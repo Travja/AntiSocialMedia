@@ -4,6 +4,7 @@ services:
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: mssql
+    user: root
     restart: always
     networks:
       - anti-media
@@ -13,15 +14,15 @@ services:
       ACCEPT_EULA: Y
       SA_PASSWORD: "myPassword!s3cure"
     volumes:
-      - ./.data/mssql:/var/opt/mssql
+      - ./.data/mssql:/var/opt/mssql/data
     
   media-api:
     build:
       context: ./
     restart: always
     ports:
-      - "7094:80"
-      - "7095:443"
+      - "7126:80"
+      - "7125:443"
     networks:
       - anti-media
     environment:

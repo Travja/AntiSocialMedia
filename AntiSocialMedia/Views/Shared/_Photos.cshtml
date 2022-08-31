@@ -32,13 +32,12 @@ const expandPhotos = () => {
 <div id="user-images">
     @foreach (var photo in Model)
     {
-        <img src="@photo.Url" class="feed-photo"
-             onclick="openImage('@photo.Url')"/>
+        @(await Html.PartialAsync("_Photo", photo.Url))
     }
     
     @if (Model.ToList().Count == 0)
     {
-        <div class="feed-photo">
+        <div>
             No Photos
         </div>
     }

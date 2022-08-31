@@ -1,29 +1,22 @@
 using AntiData.Model;
+using Microsoft.AspNetCore.Identity;
 
 namespace AntiData.Data;
 
 public class DbInitializer
 {
-    public static void Initialize(MediaContext ctx)
+    public static async Task Initialize(MediaContext ctx, RoleManager<IdentityRole> roleManager)
     {
         ctx.Database.EnsureCreated();
 
-        SetupPosts(ctx);
+        await SetupRoles(ctx, roleManager);
     }
 
-    private static void SetupPosts(MediaContext ctx)
+    private static async Task SetupRoles(MediaContext ctx, RoleManager<IdentityRole> roleManager)
     {
-        if (ctx.Posts.Any()) return;
+        if (roleManager.Roles.Any()) return;
 
-        // var posts = new MediaPost[]
-        // {
-        //     new()
-        //     {
-        //         PostText = "asdfa"
-        //     }
-        // };
-        //
-        // ctx.Posts.AddRange(posts);
-        ctx.SaveChanges();
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+        await roleManager.CreateAsync(new IdentityRole("User"));
     }
 }

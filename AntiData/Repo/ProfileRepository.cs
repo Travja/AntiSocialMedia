@@ -10,7 +10,10 @@ public class ProfileRepository : IProfileRepository
     private readonly UserManager<AntiUser> _userManager;
     private readonly MediaContext _context;
 
-    public ProfileRepository(UserManager<AntiUser> userManager, MediaContext context)
+    public ProfileRepository(
+        UserManager<AntiUser> userManager,
+        MediaContext context
+    )
     {
         _userManager = userManager;
         _context = context;
@@ -74,5 +77,19 @@ public class ProfileRepository : IProfileRepository
                     (u.UserName.ToLower().Contains(query) || u.Profile.Name.ToLower().Contains(query))
                     && u.Profile.Age >= minAge && u.Profile.Age <= maxAge
             );
+    }
+
+    public async Task<Dictionary<AntiUser, IList<string>>> GetUsersAndRoles()
+    {
+        var userMap = new Dictionary<AntiUser, IList<string>>();
+        var users = _userManager.Users
+            .Include(u => u.Profile)
+            .ToList();
+        foreach (var user in users)
+        {
+            userMap.Add(user, await _userManager.GetRolesAsync(user));
+        }
+
+        return userMap;
     }
 }

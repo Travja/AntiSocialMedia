@@ -1,0 +1,35 @@
+@namespace Microsoft.AspNetCore.Identity
+@model Dictionary<AntiData.Model.AntiUser, IList<string>>
+
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+<h2>Role Management</h2>
+<hr/>
+<form action="/Admin/CreateRole" method="post">
+    <h3>Create Role</h3>
+    <div class="form-floating">
+        <input name="role" id="role" aria-required="true" autocomplete="role" class="form-control"/>
+        <label for="role">Role</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+<hr/>
+<div>
+    <h3>Edit Roles</h3>
+    @foreach (var entry in Model)
+    {
+        <form action="/Admin/SetRole/@entry.Key.UserName" method="post">
+            <img class="avatar" src="@entry.Key.Avatar" alt="@entry.Key.Profile.Name's Avatar"/>
+            <span>@entry.Key.Profile.Name</span>
+            <select name="role">
+                @foreach (IdentityRole role in ViewBag.Roles)
+                {
+                    <option selected="@entry.Value.Contains(role.Name)" value="@role.Name">@role.Name</option>
+                }
+            </select>
+            <button type="submit" class="btn btn-primary">Update Role</button>
+        </form>
+    }
+</div>

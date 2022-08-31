@@ -29,29 +29,38 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
                     </li>
-                    <li class="search-control">
-                        <form action="/search" class="search-form">
-                            <input name="query" placeholder="Search..." class="form-control" value="@ViewBag.Query"/>
-                            <div id="filters">
-                                <span class="material-symbols-rounded"
-                                      onclick="toggleFilter()">
-                                    filter_alt
-                                </span>
-                                <div id="filter-data">
-                                    <div class="form-floating">
-                                        <input id="minAge" name="minAge" aria-required="true" autocomplete="age" class="form-control" type="number" min="0" max="130" value="@(ViewBag.MinAge ?? 0)"/>
-                                        <label for="minAge">Min Age</label>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Roles">Admin</a>
+                        </li>
+                    }
+                    @if (User.Identity is {IsAuthenticated: true})
+                    {
+                        <li class="search-control">
+                            <form action="/search" class="search-form">
+                                <input name="query" placeholder="Search..." class="form-control" value="@ViewBag.Query"/>
+                                <div id="filters">
+                                    <span class="material-symbols-rounded"
+                                          onclick="toggleFilter()">
+                                        filter_alt
+                                    </span>
+                                    <div id="filter-data">
+                                        <div class="form-floating">
+                                            <input id="minAge" name="minAge" aria-required="true" autocomplete="age" class="form-control" type="number" min="0" max="130" value="@(ViewBag.MinAge ?? 0)"/>
+                                            <label for="minAge">Min Age</label>
+                                        </div>
+                                        <div class="form-floating">
+                                            <input id="maxAge" name="maxAge" aria-required="true" autocomplete="age" class="form-control" type="number" min="0" max="130" value="@(ViewBag.MaxAge ?? 130)"/>
+                                            <label for="maxAge">Max Age</label>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Filter</button>
                                     </div>
-                                    <div class="form-floating">
-                                        <input id="maxAge" name="maxAge" aria-required="true" autocomplete="age" class="form-control" type="number" min="0" max="130" value="@(ViewBag.MaxAge ?? 130)"/>
-                                        <label for="maxAge">Max Age</label>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Filter</button>
                                 </div>
-                            </div>
-                            <button type="submit" class="hidden" id="search-button">Search</button>
-                        </form>
-                    </li>
+                                <button type="submit" class="hidden" id="search-button">Search</button>
+                            </form>
+                        </li>
+                    }
                 </ul>
                 <partial name="_LoginPartial"/>
             </div>
