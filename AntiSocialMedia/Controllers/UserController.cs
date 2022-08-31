@@ -109,10 +109,14 @@ public class UserController : Controller
     }
 
     [Authorize]
-    public IActionResult Search(string query, int minAge = -1, int maxAge = 130)
+    public IActionResult Search(string query, int minAge = 0, int maxAge = 130)
     {
         var users = _profileRepo.SearchUsers(query, minAge, maxAge);
 
+        ViewBag.Query = query;
+        ViewBag.MinAge = minAge;
+        ViewBag.MaxAge = maxAge;
+        
         return View(users);
     }
 
